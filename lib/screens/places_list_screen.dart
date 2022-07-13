@@ -1,7 +1,9 @@
 // packages
 import 'package:flutter/material.dart';
+import 'package:great_places/providers/places_provider.dart';
 // screens
 import 'package:great_places/screens/add_place_screen.dart';
+import 'package:provider/provider.dart';
 
 class PlacesListScreen extends StatelessWidget {
   @override
@@ -20,29 +22,25 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              height: 70,
-              width: 70,
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'places list...',
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          ],
+      body: Consumer<PlacesProvider>(
+        child: Center(
+          child: const Text('places is not exists yet'),
         ),
+        builder:
+            (BuildContext ctx, PlacesProvider placesProvider, Widget? ch) =>
+                placesProvider.places.length <= 0
+                    ? ch as Widget
+                    : ListView.builder(
+                        itemCount: placesProvider.places.length,
+                        itemBuilder: (ctx, i) => ListTile(
+                          title: Text(placesProvider.places[i].title),
+                          leading: CircleAvatar(
+                            backgroundImage: FileImage(
+                              placesProvider.places[i].image,
+                            ),
+                          ),
+                        ),
+                      ),
       ),
     );
   }
