@@ -22,25 +22,43 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<PlacesProvider>(
-        child: Center(
-          child: const Text('places is not exists yet'),
-        ),
-        builder:
-            (BuildContext ctx, PlacesProvider placesProvider, Widget? ch) =>
-                placesProvider.places.length <= 0
-                    ? ch as Widget
-                    : ListView.builder(
-                        itemCount: placesProvider.places.length,
-                        itemBuilder: (ctx, i) => ListTile(
-                          title: Text(placesProvider.places[i].title),
-                          leading: CircleAvatar(
-                            backgroundImage: FileImage(
-                              placesProvider.places[i].image,
-                            ),
-                          ),
+      body: FutureBuilder(
+        future: Provider.of<PlacesProvider>(context, listen: false)
+            .fetchAndSetPlaces(),
+        builder: (ctx, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const CircularProgressIndicator(),
+                        const SizedBox(
+                          height: 10,
                         ),
-                      ),
+                        const Text('Importing places...'),
+                      ],
+                    ),
+                  )
+                : Consumer<PlacesProvider>(
+                    child: Center(
+                      child: const Text('places is not exists yet'),
+                    ),
+                    builder: (BuildContext ctx, PlacesProvider placesProvider,
+                            Widget? ch) =>
+                        placesProvider.places.length <= 0
+                            ? ch as Widget
+                            : ListView.builder(
+                                itemCount: placesProvider.places.length,
+                                itemBuilder: (ctx, i) => ListTile(
+                                  title: Text(placesProvider.places[i].title),
+                                  leading: CircleAvatar(
+                                    backgroundImage: FileImage(
+                                      placesProvider.places[i].image,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                  ),
       ),
     );
   }
