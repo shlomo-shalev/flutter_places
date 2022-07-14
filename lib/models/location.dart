@@ -1,11 +1,11 @@
 class Location {
   final double latitude;
   final double longitude;
-  final String? address;
+  final String address;
 
   const Location({
     required this.latitude,
     required this.longitude,
-    this.address,
+    required this.address,
   });
 }

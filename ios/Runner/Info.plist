@@ -6,6 +6,8 @@
 	<string>get image for your place!</string>
 	<key>NSCameraUsageDescription</key>
 	<string>get image for your place!</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>get your location!</string>
 
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>

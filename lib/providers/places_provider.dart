@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:great_places/models/location.dart';
 // models
 import 'package:great_places/models/place.dart';
 import 'package:great_places/providers/db_providser.dart';
@@ -13,15 +14,24 @@ class PlacesProvider with ChangeNotifier {
     return [..._palces];
   }
 
+  Place findById(String id) {
+    return _palces.firstWhere((place) => place.id == id);
+  }
+
   void addPlace(
     String pickedTitle,
     File pickedImage,
+    Location location,
   ) {
     final Place newPlace = Place(
       id: DateTime.now().toString(),
       title: pickedTitle,
       image: pickedImage,
-      location: null,
+      location: Location(
+        latitude: location.latitude,
+        longitude: location.longitude,
+        address: location.address,
+      ),
     );
     _palces.add(newPlace);
     notifyListeners();
@@ -29,6 +39,9 @@ class PlacesProvider with ChangeNotifier {
       'id': newPlace.id,
       'title': newPlace.title,
       'image': newPlace.image.path,
+      'latitude': newPlace.location.latitude,
+      'longitude': newPlace.location.longitude,
+      'address': newPlace.location.address,
     });
   }
 
@@ -41,7 +54,11 @@ class PlacesProvider with ChangeNotifier {
               image: File(
                 item['image'],
               ),
-              location: null,
+              location: Location(
+                address: item['address'],
+                longitude: item['longitude'],
+                latitude: item['latitude'],
+              ),
             ))
         .toList();
     notifyListeners();
