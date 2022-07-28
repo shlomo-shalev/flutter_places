@@ -1,4 +1,5 @@
 // packages
+import 'dart:developer';
 import 'dart:io';
 import 'package:great_places/models/location.dart';
 import 'package:great_places/providers/google_maps_provider.dart';
@@ -29,6 +30,9 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   }
 
   void _getLocation(double latitude, double longitude) async {
+    print('=====');
+    print(await GoogleMapsProvider.getAddress(latitude, longitude));
+    print('=====');
     _location = Location(
       latitude: latitude,
       longitude: longitude,
@@ -37,9 +41,10 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
   }
 
   _savePlace() {
-    if (image == null || _titleController.text.isEmpty) {
+    if (image == null || _titleController.text.isEmpty || _location == null) {
       return;
     }
+    inspect(_location);
     handleSaveImage!();
     Provider.of<PlacesProvider>(context, listen: false).addPlace(
       _titleController.text,
